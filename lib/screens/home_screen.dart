@@ -10,7 +10,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  static const twentyFiveMinutes = 1500;
+  static const twentyFiveMinutes = 5;
 
   int totalSeconds = twentyFiveMinutes;
   bool isRunning = false;
@@ -50,6 +50,15 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void onResetPressed() {
+    timer.cancel();
+    setState(() {
+      totalSeconds = twentyFiveMinutes;
+      isRunning = false;
+      totalPomodoros = 0;
+    });
+  }
+
   String format(int seconds) {
     var duration = Duration(seconds: seconds);
     return duration.toString().split('.').first.substring(2);
@@ -77,13 +86,23 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Flexible(
             flex: 2,
-            child: Center(
-              child: IconButton(
-                onPressed: isRunning ? onPuasePressed : onStartPressed,
-                icon: Icon(isRunning ? Icons.pause_circle_outline : Icons.play_circle_outline),
-                iconSize: 120,
-                color: Theme.of(context).cardColor,
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: isRunning ? onPuasePressed : onStartPressed,
+                  icon: Icon(isRunning ? Icons.pause_circle_outline : Icons.play_circle_outline),
+                  iconSize: 120,
+                  color: Theme.of(context).cardColor,
+                ),
+                const SizedBox(height: 20),
+                IconButton(
+                  onPressed: onResetPressed,
+                  icon: const Icon(Icons.restore),
+                  iconSize: 60,
+                  color: Colors.red.shade900,
+                ),
+              ],
             ),
           ),
           Flexible(
